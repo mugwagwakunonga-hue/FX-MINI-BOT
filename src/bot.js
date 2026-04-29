@@ -38,7 +38,7 @@ class FXMiniBot {
 
     // Webhook verification endpoint (for WhatsApp)
     this.app.get('/webhook', (req, res) => {
-      const verifyToken = process.env.WEBHOOK_VERIFY_TOKEN || 'fx_mini_bot_token';
+      const verifyToken = config.webhook.verifyToken;
       const mode = req.query['hub.mode'];
       const token = req.query['hub.verify_token'];
       const challenge = req.query['hub.challenge'];
@@ -66,9 +66,9 @@ class FXMiniBot {
             const message = body.entry[0].changes[0].value.messages[0];
             const senderPhoneNumber = body.entry[0].changes[0].value.contacts[0].wa_id;
 
-            logger.info(`Message received from ${senderPhoneNumber}`, { 
+            logger.info(`Message received from ${senderPhoneNumber}`, {
               messageId: message.id,
-              messageType: message.type 
+              messageType: message.type,
             });
 
             await this.handleMessage(senderPhoneNumber, message);
